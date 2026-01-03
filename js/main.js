@@ -1,3 +1,16 @@
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCip7LHn4xv45pZOIhj1AW1V5fu4p7RQwY",
+    authDomain: "bhutan-rental.firebaseapp.com",
+    projectId: "bhutan-rental",
+    storageBucket: "bhutan-rental.firebasestorage.app",
+    messagingSenderId: "259342389102",
+    appId: "1:259342389102:web:a61f6c607464c408c7fb7f"
+ };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
 // Handle post house form
 const form = document.getElementById("postForm");
 
