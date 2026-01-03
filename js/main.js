@@ -24,3 +24,29 @@ if (form) {
     form.reset();
   });
 }
+
+// Display house listings
+const listingsContainer = document.getElementById("listings");
+
+if (listingsContainer) {
+  const houses = JSON.parse(localStorage.getItem("houses")) || [];
+
+  if (houses.length === 0) {
+    listingsContainer.innerHTML = "<p>No houses posted yet.</p>";
+  } else {
+    houses.forEach((house) => {
+      const div = document.createElement("div");
+      div.style.background = "#fff";
+      div.style.padding = "15px";
+      div.style.marginBottom = "10px";
+
+      div.innerHTML = `
+        <h3>${house.location}</h3>
+        <p><strong>Rent:</strong> BTN ${house.rent}</p>
+        <p>${house.description}</p>
+      `;
+
+      listingsContainer.appendChild(div);
+    });
+  }
+}
