@@ -20,4 +20,4 @@ A simple website that connects tenants and landlords in Bhutan.
 🚧 In development (Side project)
 
 ## Author
-Your Name
+Karma Sherab Tobden
