@@ -16,9 +16,16 @@ const db = firebase.firestore();
 // POST HOUSE
 // ==============================
 const form = document.getElementById("postForm");
-
+const auth = firebase.auth();
 if (form) {
   form.addEventListener("submit", function (e) {
+    const user = auth.currentUser;
+
+if (!user) {
+  alert("You must be logged in to post a house.");
+  window.location.href = "auth.html";
+  return;
+}
     e.preventDefault();
 
     const location = document.getElementById("location").value;
@@ -26,11 +33,13 @@ if (form) {
     const description = document.getElementById("description").value;
 
     const house = {
-      location,
-      rent,
-      description,
-      createdAt: new Date()
-    };
+    location,
+    rent,
+    description,
+    createdAt: new Date(),
+    userId: user.uid,
+    userEmail: user.email
+};
 
     db.collection("houses")
       .add(house)
