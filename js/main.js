@@ -79,6 +79,7 @@ if (listingsContainer) {
         div.innerHTML = `
           <h3>${house.location}</h3>
           <p><strong>Rent:</strong> BTN ${house.rent}</p>
+          <p>${house.description}</p>
           <p><small>Posted by: ${house.userEmail}</small></p>
         `;
 
