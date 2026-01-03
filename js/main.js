@@ -50,7 +50,33 @@ if (form) {
 const listingsContainer = document.getElementById("listings");
 
 if (listingsContainer) {
-  const houses = JSON.parse(localStorage.getItem("houses")) || [];
+  if (listingsContainer) {
+  db.collection("houses")
+    .orderBy("createdAt", "desc")
+    .onSnapshot((snapshot) => {
+      listingsContainer.innerHTML = "";
+
+      if (snapshot.empty) {
+        listingsContainer.innerHTML = "<p>No houses posted yet.</p>";
+        return;
+      }
+
+      snapshot.forEach((doc) => {
+        const house = doc.data();
+
+        const div = document.createElement("div");
+        div.className = "card";
+
+        div.innerHTML = `
+          <h3>${house.location}</h3>
+          <p><strong>Rent:</strong> BTN ${house.rent}</p>
+          <p>${house.description}</p>
+        `;
+
+        listingsContainer.appendChild(div);
+      });
+    });
+}
 
   if (houses.length === 0) {
     listingsContainer.innerHTML = "<p>No houses posted yet.</p>";
