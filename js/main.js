@@ -26,11 +26,19 @@ if (form) {
       location,
       rent,
       description,
+      createdAt: new Date()
     };
 
-    let houses = JSON.parse(localStorage.getItem("houses")) || [];
-    houses.push(house);
-    localStorage.setItem("houses", JSON.stringify(houses));
+    db.collection("houses")
+     .add(house)
+     .then(() => {
+      alert("House posted successfully!");
+      form.reset();
+  })
+  .catch((error) => {
+    console.error("Error adding document: ", error);
+    alert("Something went wrong. Try again.");
+  });
 
     alert("House posted successfully!");
 
