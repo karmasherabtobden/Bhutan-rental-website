@@ -77,3 +77,37 @@ if (listingsContainer) {
       });
     });
 }
+// ==============================
+// AUTHENTICATION
+// ==============================
+const authForm = document.getElementById("authForm");
+
+if (authForm) {
+  authForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const message = document.getElementById("authMessage");
+
+    // Try login first
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(() => {
+        message.innerText = "Logged in successfully!";
+        message.style.color = "green";
+      })
+      .catch(() => {
+        // If login fails, create account
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+          .then(() => {
+            message.innerText = "Account created & logged in!";
+            message.style.color = "green";
+          })
+          .catch((error) => {
+            message.innerText = error.message;
+            message.style.color = "red";
+          });
+      });
+  });
+}
+
