@@ -1,17 +1,20 @@
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCip7LHn4xv45pZOIhj1AW1V5fu4p7RQwY",
+  authDomain: "bhutan-rental.firebaseapp.com",
+  projectId: "bhutan-rental",
+  storageBucket: "bhutan-rental.firebasestorage.app",
+  messagingSenderId: "259342389102",
+  appId: "1:259342389102:web:a61f6c607464c408c7fb7f"
+};
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyCip7LHn4xv45pZOIhj1AW1V5fu4p7RQwY",
-    authDomain: "bhutan-rental.firebaseapp.com",
-    projectId: "bhutan-rental",
-    storageBucket: "bhutan-rental.firebasestorage.app",
-    messagingSenderId: "259342389102",
-    appId: "1:259342389102:web:a61f6c607464c408c7fb7f"
- };
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-
-// Handle post house form
+// ==============================
+// POST HOUSE
+// ==============================
 const form = document.getElementById("postForm");
 
 if (form) {
@@ -30,27 +33,24 @@ if (form) {
     };
 
     db.collection("houses")
-     .add(house)
-     .then(() => {
-      alert("House posted successfully!");
-      form.reset();
-  })
-  .catch((error) => {
-    console.error("Error adding document: ", error);
-    alert("Something went wrong. Try again.");
-  });
-
-    alert("House posted successfully!");
-
-    form.reset();
+      .add(house)
+      .then(() => {
+        alert("House posted successfully!");
+        form.reset();
+      })
+      .catch((error) => {
+        console.error("Error adding document: ", error);
+        alert("Something went wrong. Try again.");
+      });
   });
 }
 
-// Display house listings
+// ==============================
+// LISTINGS PAGE
+// ==============================
 const listingsContainer = document.getElementById("listings");
 
 if (listingsContainer) {
-  if (listingsContainer) {
   db.collection("houses")
     .orderBy("createdAt", "desc")
     .onSnapshot((snapshot) => {
@@ -76,24 +76,4 @@ if (listingsContainer) {
         listingsContainer.appendChild(div);
       });
     });
-}
-
-  if (houses.length === 0) {
-    listingsContainer.innerHTML = "<p>No houses posted yet.</p>";
-  } else {
-    houses.forEach((house) => {
-      const div = document.createElement("div");
-      div.style.background = "#fff";
-      div.style.padding = "15px";
-      div.style.marginBottom = "10px";
-
-      div.innerHTML = `
-        <h3>${house.location}</h3>
-        <p><strong>Rent:</strong> BTN ${house.rent}</p>
-        <p>${house.description}</p>
-      `;
-
-      listingsContainer.appendChild(div);
-    });
-  }
 }
