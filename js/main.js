@@ -13,44 +13,55 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 // ==============================
-// POST HOUSE
+// POST HOUSE (SAFE VERSION)
 // ==============================
 const form = document.getElementById("postForm");
 const auth = firebase.auth();
+
 if (form) {
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-    const user = auth.currentUser;
+  // Wait until the auth state is ready
+  auth.onAuthStateChanged((user) => {
 
-if (!user) {
-  alert("You must be logged in to post a house.");
-  window.location.href = "auth.html";
-  return;
-}
-
-    const location = document.getElementById("location").value;
-    const rent = document.getElementById("rent").value;
-    const description = document.getElementById("description").value;
-
-    const house = {
-    location,
-    rent,
-    description,
-    createdAt: new Date(),
-    userId: user.uid,
-    userEmail: user.email
-};
-
-    db.collection("houses")
-      .add(house)
-      .then(() => {
-        alert("House posted successfully!");
-        form.reset();
-      })
-      .catch((error) => {
-        console.error("Error adding document: ", error);
-        alert("Something went wrong. Try again.");
+    if (!user) {
+      // User not logged in → redirect
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        alert("You must be logged in to post a house.");
+        window.location.href = "auth.html";
       });
+      return;
+    }
+
+    // User is logged in → attach submit listener
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const location = document.getElementById("location").value;
+      const rent = document.getElementById("rent").value;
+      const description = document.getElementById("description").value;
+
+      // Construct house object with user info
+      const house = {
+        location,
+        rent,
+        description,
+        createdAt: new Date(),
+        userId: user.uid,
+        userEmail: user.email
+      };
+
+      db.collection("houses")
+        .add(house)
+        .then(() => {
+          alert("House posted successfully!");
+          form.reset();
+        })
+        .catch((error) => {
+          console.error("Error adding document: ", error);
+          alert("Something went wrong. Try again.");
+        });
+    });
+
   });
 }
 
