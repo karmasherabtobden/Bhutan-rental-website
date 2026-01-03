@@ -19,6 +19,7 @@ const form = document.getElementById("postForm");
 const auth = firebase.auth();
 if (form) {
   form.addEventListener("submit", function (e) {
+    e.preventDefault();
     const user = auth.currentUser;
 
 if (!user) {
@@ -26,7 +27,6 @@ if (!user) {
   window.location.href = "auth.html";
   return;
 }
-    e.preventDefault();
 
     const location = document.getElementById("location").value;
     const rent = document.getElementById("rent").value;
@@ -99,15 +99,13 @@ if (authForm) {
     const password = document.getElementById("password").value;
     const message = document.getElementById("authMessage");
 
-    // Try login first
-    firebase.auth().signInWithEmailAndPassword(email, password)
+    auth.signInWithEmailAndPassword(email, password)
       .then(() => {
         message.innerText = "Logged in successfully!";
         message.style.color = "green";
       })
       .catch(() => {
-        // If login fails, create account
-        firebase.auth().createUserWithEmailAndPassword(email, password)
+        auth.createUserWithEmailAndPassword(email, password)
           .then(() => {
             message.innerText = "Account created & logged in!";
             message.style.color = "green";
