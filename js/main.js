@@ -1,4 +1,6 @@
-// Firebase configuration
+// ==============================
+// FIREBASE CONFIG
+// ==============================
 const firebaseConfig = {
   apiKey: "AIzaSyCip7LHn4xv45pZOIhj1AW1V5fu4p7RQwY",
   authDomain: "bhutan-rental.firebaseapp.com",
@@ -11,17 +13,16 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-
-// ==============================
-// POST HOUSE (SAFE VERSION)
-// ==============================
-const form = document.getElementById("postForm");
 const auth = firebase.auth();
 
-if (form) {
-  // Wait until the auth state is ready
-  auth.onAuthStateChanged((user) => {
+// ==============================
+// POST HOUSE
+// ==============================
+const form = document.getElementById("postForm");
 
+if (form) {
+  // Wait until Firebase auth is ready
+  auth.onAuthStateChanged((user) => {
     if (!user) {
       // User not logged in → redirect
       form.addEventListener("submit", function (e) {
@@ -40,7 +41,6 @@ if (form) {
       const rent = document.getElementById("rent").value;
       const description = document.getElementById("description").value;
 
-      // Construct house object with user info
       const house = {
         location,
         rent,
@@ -61,7 +61,6 @@ if (form) {
           alert("Something went wrong. Try again.");
         });
     });
-
   });
 }
 
@@ -98,6 +97,7 @@ if (listingsContainer) {
       });
     });
 }
+
 // ==============================
 // AUTHENTICATION
 // ==============================
@@ -111,12 +111,14 @@ if (authForm) {
     const password = document.getElementById("password").value;
     const message = document.getElementById("authMessage");
 
+    // Try login first
     auth.signInWithEmailAndPassword(email, password)
       .then(() => {
         message.innerText = "Logged in successfully!";
         message.style.color = "green";
       })
       .catch(() => {
+        // If login fails, create account
         auth.createUserWithEmailAndPassword(email, password)
           .then(() => {
             message.innerText = "Account created & logged in!";
@@ -129,4 +131,3 @@ if (authForm) {
       });
   });
 }
-
